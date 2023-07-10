@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Entreprise;
 use Illuminate\Http\Request;
 
 class EntrepriseController extends Controller
@@ -11,7 +11,8 @@ class EntrepriseController extends Controller
      */
     public function index()
     {
-        //
+        $entreprises = Entreprise::all();
+        return view('Ventes.facture')->with('entreprises', $entreprises);
     }
 
     /**
@@ -49,9 +50,23 @@ class EntrepriseController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Entreprise $entreprise)
     {
-        //
+        $request->validate([
+           
+            'Nom_Commercial'=>'required',
+            'Pays'=>'required',
+            'Ville'=>'required',
+            'CP' =>'required',
+            'ICE'=>'required',
+            'Telephone'=>'required',
+        
+        ]);
+
+        $entreprise->update($request->all());
+
+        return redirect()->route('facture')
+            ->with('success', 'info  updated successfully.');
     }
 
     /**

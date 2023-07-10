@@ -23,7 +23,7 @@
                     <div class=" dropdown-header noti-title">
                         <h6 class="text-overflow m-0">{{ __('Welcome!') }}</h6>
                     </div>
-                    <a href="{{ route('profile.edit') }}" class="dropdown-item">
+                    <a href="#" class="dropdown-item">
                         <i class="ni ni-single-02"></i>
                         <span>{{ __('My profile') }}</span>
                     </a>
@@ -93,29 +93,29 @@
                     <div class="collapse show" id="navbar-examples">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('profile.edit') }}">
+                                <a class="nav-link" href="{{ route('Listesfacture') }}">
                                     <!-- <i class=" fa-regular fa-file-invoice" style="color: #4297cd;"></i> -->
                                     <span>{{ __('Factures') }}</span>
                                   
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('profile.edit') }}">
+                                <a class="nav-link" href="{{route('ListesfReccurentes')}}">
                                     {{ __('Factures récurrentes') }}
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('user.index') }}">
+                                <a class="nav-link" href="#">
                                     {{ __('Devis') }}
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('user.index') }}">
+                                <a class="nav-link" href="{{route('ListesbonCommnd')}}">
                                     {{ __('Bon de Commande') }}
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('user.index') }}">
+                                <a class="nav-link" href="{{route('ListesbonLivraison')}}">
                                     {{ __('Bon de Livraison') }}
                                 </a>
                             </li>
@@ -131,12 +131,12 @@
                     <div class="collapse show" id="navbar-examples-services">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('profile.edit') }}">
+                                <a class="nav-link" href="{{route('ListesServices')}}">
                                     <!-- <i class=" fa-regular fa-file-invoice" style="color: #4297cd;"></i> -->
                                     <span>{{ __('Services') }}</span>
                                   
                                 </a>
-                                <a class="nav-link" href="{{ route('profile.edit') }}">
+                                <a class="nav-link" href="#">
                                     <!-- <i class=" fa-regular fa-file-invoice" style="color: #4297cd;"></i> -->
                                     <span>{{ __('Catégories') }}</span>
                                   
@@ -155,12 +155,12 @@
                     <div class="collapse show" id="navbar-examples-contact">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('profile.edit') }}">
+                                <a class="nav-link" href="#">
                                     <!-- <i class=" fa-regular fa-file-invoice" style="color: #4297cd;"></i> -->
                                     <span>{{ __('Client') }}</span>
                                   
                                 </a>
-                                <a class="nav-link" href="{{ route('profile.edit') }}">
+                                <a class="nav-link" href="#">
                                     <!-- <i class=" fa-regular fa-file-invoice" style="color: #4297cd;"></i> -->
                                     <span>{{ __('Fournisseur') }}</span>
                                   
@@ -170,23 +170,31 @@
                         </ul>
                     </div>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#navbar-examples-achats" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-examples-achats">
+                        <i class="ni ni-single-02 text-orange"></i>
+                        <span class="nav-link-text" style="color: #1f6de3;">{{ __('Achats') }}</span>
+                    </a>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('icons') }}">
-                        <i class="ni ni-badge text-Orange"></i> {{ __('Icons') }}
-                    </a>
+                    <div class="collapse show" id="navbar-examples-achats">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    <!-- <i class=" fa-regular fa-file-invoice" style="color: #4297cd;"></i> -->
+                                    <span>{{ __('Achats') }}</span>
+                                  
+                                </a>
+                                <a class="nav-link" href="#">
+                                    <!-- <i class=" fa-regular fa-file-invoice" style="color: #4297cd;"></i> -->
+                                    <span>{{ __('Catégorie') }}</span>
+                                  
+                                </a>
+                            </li>
+                           
+                        </ul>
+                    </div>
                 </li>
-                <li class="nav-item ">
-                    <a class="nav-link" href="{{ route('map') }}">
-                        <i class="ni ni-pin-3 text-orange"></i> {{ __('Maps') }}
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('table') }}">
-                      <i class="ni ni-bullet-list-67 text-default"></i>
-                      <span class="nav-link-text">Tables</span>
-                    </a>
-                </li>
+              
                 <li class="nav-item">
                     <a class="nav-link" href="#">
                         <i class="ni ni-circle-08 text-pink"></i> {{ __('Register') }}
@@ -199,23 +207,7 @@
             <!-- Heading -->
             <h6 class="navbar-heading text-muted">Documentation</h6>
             <!-- Navigation -->
-            <ul class="navbar-nav mb-md-3">
-                <li class="nav-item">
-                    <a class="nav-link" href="https://argon-dashboard-laravel.creative-tim.com/docs/getting-started/overview.html">
-                        <i class="ni ni-spaceship"></i> Getting started
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="https://argon-dashboard-laravel.creative-tim.com/docs/foundation/colors.html">
-                        <i class="ni ni-palette"></i> Foundation
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="https://argon-dashboard-laravel.creative-tim.com/docs/components/alerts.html">
-                        <i class="ni ni-ui-04"></i> Components
-                    </a>
-                </li>
-            </ul>
+           
         </div>
     </div>
 </nav>

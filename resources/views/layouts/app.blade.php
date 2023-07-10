@@ -14,6 +14,10 @@
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
         <!-- Extra details for Live View on GitHub Pages -->
         <link rel="stylesheet" type="text/css" href="{{ asset('stylescard.css') }}">
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        
+      
+
        <!-- Inclure les fichiers CSS de Bootstrap via CDN -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -51,5 +55,6 @@
         <!-- Argon JS -->
         <script src="{{ asset('argon') }}/js/argon.js?v=1.0.0"></script>
         <script src="{{ asset('argon') }}/js/modal.js"></script>
+  
     </body>
 </html>

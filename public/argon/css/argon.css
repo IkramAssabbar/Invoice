@@ -8588,7 +8588,9 @@ button.bg-darker:focus
 {
     flex-wrap: nowrap !important;
 }
-
+.hidden {
+    display: none;
+  }
 .flex-wrap-reverse
 {
     flex-wrap: wrap-reverse !important;
