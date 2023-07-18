@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\BonLivraisonExport;
 use Illuminate\Http\Request;
 use App\Models\Entreprise;
 use App\Models\Client;
@@ -9,6 +10,10 @@ use App\Models\Service;
 use App\Models\Categorie;
 use App\Models\BonLivraison;
 use App\Models\BonLivraisonService;
+use App\Models\Historique;
+use Auth;
+use Maatwebsite\Excel\Facades\Excel;
+
 class BonLivraisonController extends Controller
 {
     public function index()
@@ -90,7 +95,7 @@ class BonLivraisonController extends Controller
 
     $client = Client::find($BonLiv->IdClient );
     
-    return redirect()->route('bodyMailRecurentes')->with(['success', 'Facture enregistrée avec succès.','client' => $client]);
+    return redirect()->route('bodyMailLivrai')->with(['success', 'Facture enregistrée avec succès.','client' => $client,'BonLiv'=> $BonLiv]);
 }
     public function updateDATAEntreprise(Request $request, Entreprise $entreprise)
     {
@@ -116,7 +121,7 @@ class BonLivraisonController extends Controller
     public function showBodyMail()
     {
       
-        return view('Ventes.bodyMail');
+        return view('Ventes.bodyMailLivra');
     }
     /**
      * Display the specified resource.
@@ -145,8 +150,27 @@ class BonLivraisonController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
+    public function destroy(BonLivraison $BonLiv)
+    {$user = Auth::user();
+        Historique::create([
+            'iduser' => $user->id,
+            'type' => 'suppression',
+            'message' => $user->name . ' a supprimé le bon de Livraison N°'.$BonLiv->id 
+            
+        ]);
+        $BonLiv->delete();
+        return redirect()->route('ListesbonLivraison')
+        ->with('success', 'Bon de livraison deleted successfully.');
     }
+    public function export() 
+    { $user = Auth::user();
+        Historique::create([
+            'iduser' => $user->id,
+            'type' => 'exportation',
+            'message' => $user->name . ' a exporté la liste des bons de Livraisons ' 
+            
+        ]);
+        return Excel::download(new BonLivraisonExport, 'Bon_Livraison.xlsx');
+    }
+       
 }

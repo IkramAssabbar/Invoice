@@ -136,9 +136,9 @@
                                     <span>{{ __('Services') }}</span>
                                   
                                 </a>
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="{{route('ListesCategorie')}}">
                                     <!-- <i class=" fa-regular fa-file-invoice" style="color: #4297cd;"></i> -->
-                                    <span>{{ __('Catégories') }}</span>
+                                    <span>{{ __('Categories') }}</span>
                                   
                                 </a>
                             </li>
@@ -179,12 +179,12 @@
                     <div class="collapse show" id="navbar-examples-achats">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="{{route('ListesAchats')}}">
                                     <!-- <i class=" fa-regular fa-file-invoice" style="color: #4297cd;"></i> -->
                                     <span>{{ __('Achats') }}</span>
                                   
                                 </a>
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="{{route('ListesCategorieCh')}}">
                                     <!-- <i class=" fa-regular fa-file-invoice" style="color: #4297cd;"></i> -->
                                     <span>{{ __('Catégorie') }}</span>
                                   

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\BonCommandExport;
 use Illuminate\Http\Request;
 use App\Models\Entreprise;
 use App\Models\Client;
@@ -9,7 +10,9 @@ use App\Models\Service;
 use App\Models\Categorie;
 use App\Models\BonCommande;
 use App\Models\BonCommandeService;
-
+use App\Models\Historique;
+use Auth;
+use Maatwebsite\Excel\Facades\Excel;
 class BonCommandeController extends Controller
 {
     
@@ -96,7 +99,7 @@ class BonCommandeController extends Controller
 
     $client = Client::find($BonCom->IdClient );
     
-    return redirect()->route('bodyMailRecurentes')->with(['success', 'Facture enregistrée avec succès.','client' => $client]);
+    return redirect()->route('bodyMailCmd')->with(['success', 'Facture enregistrée avec succès.','client' => $client,'BonCom'=>$BonCom]);
 }
     public function updateDATAEntreprise(Request $request, Entreprise $entreprise)
     {
@@ -122,7 +125,7 @@ class BonCommandeController extends Controller
     public function showBodyMail()
     {
       
-        return view('Ventes.bodyMail');
+        return view('Ventes.bodyMailCmd');
     }
     /**
      * Display the specified resource.
@@ -151,8 +154,28 @@ class BonCommandeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
+    public function destroy(BonCommande $bonComm)
+    { $user = Auth::user();
+        Historique::create([
+            'iduser' => $user->id,
+            'type' => 'suppression',
+            'message' => $user->name . ' a supprimé le bon de commande N°'.$bonComm->id 
+            
+        ]);
+        $bonComm->delete();
+        return redirect()->route('ListesbonCommnd')
+            ->with('success', 'Service deleted successfully.');
     }
+    public function export() 
+    {
+        $user = Auth::user();
+        Historique::create([
+            'iduser' => $user->id,
+            'type' => 'exportation',
+            'message' => $user->name . ' a exporté la liste des bons de Commandes ' 
+            
+        ]);
+        return Excel::download(new BonCommandExport, 'Bon_Commande.xlsx');
+    }
+       
 }

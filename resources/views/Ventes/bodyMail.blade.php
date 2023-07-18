@@ -19,10 +19,14 @@
                     <form action="{{route('sendMail')}}" method="GET">
                         <div class="form-group row">
                           <?php $client = session('client'); ?>
+                          <?php $facture = session('facture'); ?>
                             <label for="sujet" class="col-auto col-form-label">Sujet :</label>
                             <div class="col">
-                              <input type="text" class="form-control" id="" placeholder="Sujet" name="subject">
+                              <input type="text" class="form-control" id="" placeholder="Sujet" name="subject" value="MGA Invoice Notify">
                               <input type="hidden" class="form-control" id="" placeholder="destinataire" name="destin" value="{{ $client->email }}">
+                              <input type="hidden" class="form-control" id="" placeholder="destinataire" name="clientname" value="{{ $client->nom . ' ' . $client->prenom }}">
+
+                              <input type="hidden" class="form-control" id="" placeholder="idfacture" name="factureid" value="{{$facture->id }}">
 
                             </div>
                           </div>
@@ -30,7 +34,7 @@
                           <div class="form-group row">
                             <label for="body" class="col-auto col-form-label">Texte :</label>
                             <div class="col">
-                              <textarea type="text" class="form-control" id="" placeholder="message à inclure" name="body"></textarea>
+                              <textarea type="text" class="form-control" id="" placeholder="message à inclure" name="body">Bonjour,Veuillez trouver ci-joint votre facture de MGA</textarea>
                             </div>
                           </div>
                           <button type="submit"  class="btn btn-primary  btn-block mb-3" style="background-color: rgb(27, 164, 210);">Valider</button>

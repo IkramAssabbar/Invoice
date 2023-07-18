@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AchatController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EntrepriseController;
 use App\Http\Controllers\FactureController;
@@ -9,6 +10,10 @@ use App\Http\Controllers\MailController;
 use App\Http\Controllers\FactureReccurentesController;
 use App\Http\Controllers\BonCommandeController;
 use App\Http\Controllers\BonLivraisonController;
+use App\Http\Controllers\CategorieChController;
+use Illuminate\Support\Facades\Auth;
+
+
 
 
 /*
@@ -30,9 +35,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Auth::routes();
 
-Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home');
+
 
 Route::group(['middleware' => 'auth'], function () {
 	Route::resource('user', 'App\Http\Controllers\UserController', ['except' => ['show']]);
@@ -45,11 +49,17 @@ Route::get('/bodyMail', [FactureController::class, 'showBodyMail'])->name('bodyM
 Route::put('/factures/{entreprise}', [FactureController::class, 'updateEntreprise'])->name('entreprise.update');
 Route::put('/factures/Data/{entreprise}', [FactureController::class, 'updateDATAEntreprise'])->name('DATA.update');
 Route::post('/factures', [FactureController::class, 'store'])->name('Factures.store');
+Route::delete('/DeleteFactures/{facture}', [FactureController::class, 'destroy'])->name('DeleteFacture');
+
 //Route::put('/factures /{service}', [FactureController::class, 'updateService'])->name('service.update');
 
 
-
+Route::get('/sendmailreccurent', [MailController::class, 'indexrecu'])->name("sendMailReccure");
 Route::get('/sendmail', [MailController::class, 'index'])->name("sendMail");
+Route::get('/sendMailLivrai', [MailController::class, 'indexLivrai'])->name("sendMailLivrai");
+Route::get('/sendMailCmd', [MailController::class, 'indexComm'])->name("sendMailCmd");
+
+
 Route::get('/categories/{id}',[CategorieController::class,'show'])->name('show');
 Route::get('/services/{id}', [ServiceController::class, 'getServiceInfo'])->name('services.info');
 Route::get('/getServices', [ServiceController::class, 'getServices'])->name('getServices');
@@ -61,6 +71,8 @@ Route::get('/bodyMailRecurentes', [FactureReccurentesController::class, 'showBod
 Route::put('/factures/Recurrentes/{entreprise}', [FactureReccurentesController::class, 'updateEntreprise'])->name('entrepriseR.update');
 Route::put('/factures/recurenteData/{entreprise}', [FactureReccurentesController::class, 'updateDATAEntreprise'])->name('DATAR.update');
 Route::post('/facturesRecurrentes', [FactureReccurentesController::class, 'store'])->name('FacturesRecurentes.store');
+Route::delete('/DeleteFacRec/{facture}', [FactureReccurentesController::class, 'destroy'])->name('DeleteFactureRec');
+Route::get('/facturesRecurrExport', [FactureReccurentesController::class, 'export'])->name('facturesRecurr.export');
 
 //BON DE COMMANDE
 Route::get('/BonCommnde', [BonCommandeController::class, 'index'])->name('bonCommnd');
@@ -68,6 +80,11 @@ Route::get('/ListesBonCommnde', [BonCommandeController::class, 'showAllBonComman
 Route::put('/bonCommnde/{entreprise}', [BonCommandeController::class, 'updateEntreprise'])->name('entrepriseBC.update');
 Route::put('/bonCommnde/Data/{entreprise}', [BonCommandeController::class, 'updateDATAEntreprise'])->name('DATABC.update');
 Route::post('/bonCommndeStore', [BonCommandeController::class, 'store'])->name('bonCommnd.store');
+Route::delete('/DeleteBonCm/{bonComm}', [BonCommandeController::class, 'destroy'])->name('DeleteBonCm');
+Route::get('/bonCommandeExport', [BonCommandeController::class, 'export'])->name('boncomm.export');
+Route::get('/bodyMailCmd', [BonCommandeController::class, 'showBodyMail'])->name('bodyMailCmd');
+
+
 
 //bon Livraison
 Route::get('/BonLivraison', [BonLivraisonController::class, 'index'])->name('bonLivraison');
@@ -75,17 +92,67 @@ Route::get('/ListesBonLivraison', [BonLivraisonController::class, 'showAllbonLiv
 Route::put('/bonLivraison/{entreprise}', [BonLivraisonController::class, 'updateEntreprise'])->name('entrepriseBL.update');
 Route::put('/bonLivraison/Data/{entreprise}', [BonLivraisonController::class, 'updateDATAEntreprise'])->name('DATABL.update');
 Route::post('/bonLivraisonStore', [BonLivraisonController::class, 'store'])->name('bonLivraison.store');
+Route::delete('/DeleteBonLiv/{BonLiv}', [BonLivraisonController::class, 'destroy'])->name('DeleteBonLiv');
+Route::get('/bonLivraisonExport', [BonLivraisonController::class, 'export'])->name('bonLivrai.export');
+Route::get('/bodyMailLivra', [BonLivraisonController::class, 'showBodyMail'])->name('bodyMailLivrai');
+
 
 //Services  et categorie 
 Route::get('/AddServices', [ServiceController::class, 'index'])->name('AddServices');
 Route::get('/ListesServices', [ServiceController::class, 'showAllServices'])->name('ListesServices');
 Route::post('/storeService', [ServiceController::class, 'store'])->name('service.store');
 Route::post('/storeCategorie', [CategorieController::class, 'store'])->name('categorie.store');
+Route::post('/storeCategories', [CategorieController::class, 'store2'])->name('categorie.store2');
+
+Route::get('/addCategorie', [CategorieController::class, 'index'])->name('AddCategorie');
+Route::get('/categories/{categorie}/edit', [CategorieController::class, 'edit'])->name('EditCategorie');
+Route::put('/categories/{categorie}', [CategorieController::class, 'update'])->name('categorie.update');
+Route::get('/ListesCategories', [CategorieController::class, 'showAllCategories'])->name('ListesCategorie');
+Route::delete('/categories/{categorie}', [CategorieController::class, 'destroy'])->name('categorie.destroy');
+
+
+//Charges et categorie
+Route::get('/ListesAchats', [AchatController::class, 'index'])->name('ListesAchats');
+Route::get('/AddAchats', [AchatController::class, 'create'])->name('AddAchats');
+Route::post('/storeAchats', [AchatController::class, 'store'])->name('achats.store');
+Route::get('/achats/{achat}/edit', [AchatController::class, 'edit'])->name('achats.edit');
+Route::put('/achats/{achat}', [AchatController::class, 'update'])->name('achats.update');
+Route::delete('/achats/{achat}', [AchatController::class, 'destroy'])->name('achat.destroy');
+
+
+
+
+Route::get('/AddCategorieCh', [CategorieChController::class, 'create'])->name('AddCategorieCh');
+Route::post('/storeCategoriech', [CategorieChController::class, 'store'])->name('categorieCh.store');
+Route::get('/ListesCategorieCh', [CategorieChController::class, 'index'])->name('ListesCategorieCh');
+Route::put('/categoriesch/{categorie}', [CategorieChController::class, 'update'])->name('categorieCH.update');
+Route::get('/categoriesch/{categorie}/edit', [CategorieChController::class, 'edit'])->name('categoriech.edit');
+Route::delete('/categoriesch/{categorie}', [CategorieChController::class, 'destroy'])->name('categoriech.delete');
+
+
+
+
+
+
+
+
+
+
 Route::put('/services/{service}', [ServiceController::class, 'update'])->name('service.update');
 Route::get('/services/{service}/edit', [ServiceController::class, 'edit'])->name('EditServices');
 Route::delete('/services/{service}', [ServiceController::class, 'destroy'])->name('services.destroy');
+Route::post('/factures', [FactureController::class, 'store'])->name('Factures.store');
+Route::get('/servicesExport', [ServiceController::class, 'export'])->name('services.export');
+Route::post('/servicesImport', [ServiceController::class, 'import'])->name('services.import');
+Route::get('/servicessViewimport', [ServiceController::class, 'viewImport'])->name('Servicesview.import');
 
 
+
+//exportation et importation de facture 
+    Route::get('/facturesexport', [FactureController::class, 'export'])->name('factures.export');
+    Route::post('/facturesimport', [FactureController::class, 'import'])->name('factures.import');
+
+//exportation et importation de factures Reccurentes
 
 
 

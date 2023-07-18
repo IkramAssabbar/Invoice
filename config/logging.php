@@ -126,6 +126,15 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+
+        
+            'his' => [
+                'driver' => 'daily',
+                'path' => storage_path('logs/laravel.log'),
+                'level' => 'info',
+            ],
+            // Autres canaux de journalisation...
+        
     ],
 
 ];

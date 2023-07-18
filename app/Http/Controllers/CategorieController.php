@@ -12,7 +12,7 @@ class CategorieController extends Controller
      */
     public function index()
     {
-        //
+        return view("Services.AddCategories");
     }
 
     /**
@@ -37,6 +37,17 @@ class CategorieController extends Controller
 
 
     }
+    public function store2(Request $request)
+    {
+        $categorie=new Categorie();
+        $categorie->Nom_Categorie=$request->input('categorieName');
+         
+          $categorie->save();
+
+        return redirect()->route('AddCategorie')->with(['success' => 'categorie enregistrée avec succès.']);
+
+
+    }
 
     /**
      * Display the specified resource.
@@ -50,24 +61,42 @@ class CategorieController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Categorie $categorie)
     {
-        //
+        return view('Services.UpdateCategorie',compact('categorie'));
+
+    }
+
+    public function showAllCategories(Categorie $categorie)
+    {
+        $categories= Categorie::all();
+        return view('Services.ListesCategories',compact('categories'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Categorie $categorie)
     {
-        //
+        $request->validate([
+            'Nom_Categorie'=>'required',
+        ]
+
+        );
+        $categorie->update($request->all());
+         
+         return redirect()->route('ListesCategorie')
+             ->with('success', 'categorie updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Categorie $categorie)
     {
-        //
+        $categorie->delete();
+        return redirect()->route('ListesCategorie')
+        ->with('success', 'Categorie deleted successfully.');
     }
+
 }

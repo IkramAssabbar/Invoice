@@ -170,6 +170,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         LaravelFrontendPresets\ArgonPreset\ArgonPresetServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
 
     ])->toArray(),
 
@@ -185,6 +186,8 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'Route'     => "Illuminate\Support\Facades\Route",
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 

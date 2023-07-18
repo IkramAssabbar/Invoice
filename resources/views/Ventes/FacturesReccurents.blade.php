@@ -37,17 +37,17 @@
                                 </button>
                             </div>
                             <div class="col-md-12 mb-3">
-                                <input type="date" class="form-control" id="" placeholder="Date">
+                                <input type="date" class="form-control" id="" placeholder="Date" name="date_envoi">
                             </div>
                             <div class="col-md-12 mb-3">
-                                <input type="date" class="form-control" id="" placeholder="Echeance">
+                                <input type="date" class="form-control" id="" placeholder="Echeance" name="stopenvoie">
                             </div>
                             <div class="col-md-12 mb-2">
                                 <h5>Envoie tous les</h5>
-                                <select name="" id="" class="form-control">
-                                    <option value="">Les jours</option>
-                                    <option value="">Les semaines</option>
-                                    <option value="">Les mois</option>
+                                <select name="frequence" id="" class="form-control">
+                                    <option value="0">Les jours</option>
+                                    <option value="1">Les semaines</option>
+                                    <option value="2">Les mois</option>
                                 </select>
                             </div>
                             <div class="col-md-12 mb-2">

@@ -13,7 +13,15 @@ return new class extends Migration
     {
         Schema::create('charges', function (Blueprint $table) {
             $table->id();
-            
+            $table->string('libelle');
+            $table->float('prix');
+            $table->integer('tva');
+            $table->string('description');
+            $table->unsignedBigInteger('categorieid');
+            $table->foreign('categorieid')
+            ->references('id')
+            ->on('CategorieCh')
+            ->onDelete('cascade');
             $table->timestamps();
         });
     }

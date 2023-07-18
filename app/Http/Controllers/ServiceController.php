@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ServiceExport;
+use App\Imports\ServiceImport;
 use App\Models\Categorie;
 use Illuminate\Http\Request;
 use App\Models\Service;
 use App\Models\Facture;
+use Maatwebsite\Excel\Facades\Excel;
+
 class ServiceController extends Controller
 {
     /**
@@ -129,4 +133,9 @@ public function enregistrerServices(Request $request,$id)
         return redirect()->route('ListesServices')
             ->with('success', 'Service deleted successfully.');
     }
+    public function export() 
+    {
+        return Excel::download(new ServiceExport, 'services.xlsx');
+    }
+   
 }

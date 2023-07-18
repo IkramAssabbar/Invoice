@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\FactureRecurExport;
 use Illuminate\Http\Request;
 use App\Models\Entreprise;
 use App\Models\Client;
 use App\Models\Service;
 use App\Models\Categorie;
+use App\Models\DateReccur;
 use App\Models\FactureReccurente;
 use App\Models\FactureRecService;
+use App\Models\Historique;
+use Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class FactureReccurentesController extends Controller
 {
@@ -83,6 +88,7 @@ class FactureReccurentesController extends Controller
     $factureR->tva = $request->input('TvaV');
     $factureR->montantHtva = $request->input('montantHtva');
     $factureR->montantTotal = $request->input('montantTotal');
+    $factureR->datereccur=$request->input('date_envoi');
     $factureR->save();
 
     $idservices = explode(",", $request->input('tab'));
@@ -95,8 +101,14 @@ class FactureReccurentesController extends Controller
     }
 
     $client = Client::find($factureR->IdClient );
-    
-    return redirect()->route('bodyMailRecurentes')->with(['success', 'Facture enregistrée avec succès.','client' => $client]);
+ 
+    $dateEnvoie=DateReccur::find(1);
+    $dateEnvoie->date_envoie=$request->input('date_envoi');
+    $dateEnvoie->stopenvoie=$request->input('stopenvoie');
+    $dateEnvoie->frequence=$request->input('frequence');
+
+    $dateEnvoie->update();
+    return redirect()->route('bodyMailRecurentes')->with(['success', 'Facture enregistrée avec succès.','client' => $client,'factureR'=>$factureR]);
 }
     public function updateDATAEntreprise(Request $request, Entreprise $entreprise)
     {
@@ -122,7 +134,7 @@ class FactureReccurentesController extends Controller
     public function showBodyMail()
     {
       
-        return view('Ventes.bodyMail');
+        return view('Ventes.bodyMailRecu');
     }
     /**
      * Display the specified resource.
@@ -151,8 +163,28 @@ class FactureReccurentesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
+    public function destroy(FactureReccurente $facture)
+    {$user = Auth::user();
+        Historique::create([
+            'iduser' => $user->id,
+            'type' => 'suppression',
+            'message' => $user->name . ' a supprimé la facture Recurrente ' . $facture->id,
+           
+        ]);
+        $facture->delete();
+        return redirect()->route('ListesfReccurentes')
+            ->with('success', 'Fcature deleted successfully.');
     }
+
+    public function export() 
+    { $user = Auth::user();
+        Historique::create([
+            'iduser' => $user->id,
+            'type' => 'exportation',
+            'message' => $user->name . ' a exporté la liste des factures reccurentes ' 
+            
+        ]);
+        return Excel::download(new FactureRecurExport, 'factures_Recurentes.xlsx');
+    }
+       
 }

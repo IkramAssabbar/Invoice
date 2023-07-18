@@ -8,7 +8,7 @@
     <div class="container-fluid d-flex align-items-center">
         <div class="row">
             <div class="col-md-12 {{ $class ?? '' }}">
-                <h1 style="font-family: cursive; color:rgb(27, 164, 210);">Ajouter votre Service</h1>
+                <h1 style="font-family: cursive; color:rgb(27, 164, 210);">Ajoutez votre Service</h1>
             </div>
         </div>
     </div>

@@ -11,18 +11,7 @@
                 <h1 style="font-family: cursive; color:rgb(27, 164, 210);">Liste des services</h1>
             </div>
         </div>
-        <div class="row align-items-center">
-            <div class="col-md-3">
-                <form method="GET" action="{{ route('bonCommnd') }}" class="mb-3">
-                    <button type="submit" class="btn btn-dark btn-round-lg" >+ Importer vos Services</button>
-                </form>
-            </div>
-            <div class="col-md-3">
-                <form method="GET" action="{{ route('bonCommnd') }}" class="mb-3">
-                    <button type="submit" class="btn btn-dark btn-round-lg" >+ Exporter vos Services</button>
-                </form>
-            </div>
-        </div>
+        
     </div>
 </div>
  
@@ -34,9 +23,19 @@
         <div class="col-lg-16 col-md-12">
             <div class="card" style="width: 1000px;">
                 <div class="card-header d-flex justify-content-between">
+                    <div class="col-md-3">
                     <form method="GET" action="{{ route('AddServices') }}" class="mb-3">
                         <button type="submit" class="btn btn-round-lg" style="background-color: rgb(27, 164, 210);">+ Ajouter un Service</button>
                     </form>
+                    </div>
+                   
+                        <div class="col-md-3">
+                            <form method="GET" action="{{ route('services.export') }}" class="mb-3">
+                                <button type="submit" class="btn btn-dark btn-round-lg" >+ Exporter vos Services</button>
+                            </form>
+                        </div>
+                    
+                  
                     <form class="navbar-search form-inline mr-3 d-none d-md-flex ml-lg-auto">
                         <div class="form-group mb-0">
                             <div class="input-group input-group-alternative">

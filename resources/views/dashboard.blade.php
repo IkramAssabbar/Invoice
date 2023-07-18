@@ -5,7 +5,7 @@
     
     <div class="container-fluid mt--7">
         <div class="row">
-            <div class="col-xl-8 mb-5 mb-xl-0">
+            <div class="col-xl-5 mb-4 mb-xl-2">
                 <div class="card bg-gradient-default shadow">
                     <div class="card-header bg-transparent">
                         <div class="row align-items-center">
@@ -40,21 +40,38 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-4">
+            <div class="col-xl-7">
                 <div class="card shadow">
                     <div class="card-header bg-transparent">
                         <div class="row align-items-center">
                             <div class="col">
-                                <h6 class="text-uppercase text-muted ls-1 mb-1">Performance</h6>
-                                <h2 class="mb-0">Total orders</h2>
+                                <h2 class="text-uppercase text-muted ls-1 mb-1">Journal de bord</h2>
+                                
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
                         <!-- Chart -->
-                        <div class="chart">
-                            <canvas id="chart-orders" class="chart-canvas"></canvas>
-                        </div>
+                    
+    <div class="historique-item">
+        <table>
+            <tbody>
+                @foreach ($historiques as $his)
+            <tr>
+                <td>
+                    <h6>{{ $his->message }}</h6>
+                </td>
+                <td>
+                    <h6 class="created-at" style="color: rgba(225, 54, 38, 0.639);margin-left:30px;">{{ $his->created_at }}</h6>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+        </table>
+    </div>
+
+
+                    
                     </div>
                 </div>
             </div>

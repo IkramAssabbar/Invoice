@@ -9,7 +9,7 @@
 <body>
     <h1>Votre Facture de Maroc Generation Agency </h1>
     <p>{{ $data['body'] }}</p>
-    <h5> Sincères salutations </h5>
+    <h4> Sincères salutations </h4>
     <H5>MGA</H5>
 </body>
 </html>
