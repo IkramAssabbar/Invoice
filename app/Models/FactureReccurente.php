@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use App\Models\Client;
 
 class FactureReccurente extends Model
@@ -19,7 +20,7 @@ class FactureReccurente extends Model
 }
 public function Services()
 {
-    return $this->belongsToMany(Service::class);
+    return $this->belongsToMany(Service::class,'facture_rec_services','idFactureRecu','idServiceRec');
 }
 
 public function getRetardAttribute()

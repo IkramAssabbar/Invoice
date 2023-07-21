@@ -9,26 +9,27 @@
         <div class="row">
             <div class="col-md-12 {{ $class ?? '' }}">
              
-            <h1 style="font-family: cursive; color:rgb(27, 164, 210);" >Liste des Bons de Livraison </h1>
+            <h1 style="font-family: cursive; color:rgb(27, 164, 210);" >Liste des Bons de Commande </h1>
                 
             </div>
         </div>
     </div>
 </div> 
-
+ 
 
     <div class="container-fluid mt--8">
         <div class="row justify-content-center">
             <div class="col-lg-16 col-md-12">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between">
-                        <div class="col-md-4">
-                        <form method="GET" action="{{ route('bonLivraison') }}">
-                            <button type="submit" class="btn btn-success btn-round-lg">+ Créer un Bon de Livraison </button>
+                <div class="card" style="width: 969px;">
+                    <div class="card-header d-flex justify-content-between" >
+                        <div class="col-md-4 ">
+                        <form method="GET" action="{{ route('bonCommnd') }}">
+                            <button type="submit" class="btn btn-info btn-round-lg"   >+ Créer un Bon de Commande </button>
                         </form>
                         </div>
+                        
                         <div class="col-md-3">
-                            <form method="GET" action="{{ route('bonLivrai.export') }}" class="mb-3">
+                            <form method="GET" action="{{ route('boncomm.export') }}" class="mb-3">
                                 <button type="submit" class="btn btn-dark btn-round-lg" >+ Exporter Vos Bons</button>
                             </form>
                         </div>
@@ -38,7 +39,7 @@
                                     <div class="input-group-prepend border-dark">
                                         <span class="input-group-text"><i class="fas fa-search" style="color: black;"></i></span>
                                     </div>
-                                    <input class="form-control bg-grey" placeholder="Search" type="text" style="color: black;" id="searchInputBL">
+                                    <input class="form-control bg-grey" placeholder="Search" type="text" style="color: black;" id="searchInputBN">
                                 </div>
                             </div>
                         </form>
@@ -47,28 +48,29 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th scope="col">Bon de Livraison</th>
+                                <th scope="col">Bon de Commande</th>
                                 <th scope="col">Date</th>
                                 <th scope="col">Client</th>
                                 <th scope="col">Montant</th>
                                 <th scope="col">Statut</th>
                                 <th scope="col">Date Livraison</th>
                                 <th scope="col">Retard</th>
-                                <th scope="col">Action</th>                            </tr>
+                                <th scope="col">action</th>
+                            </tr>
                         </thead>
                         <tbody>
-                            @foreach ($BonLiv as $BonLiv)
+                            @foreach ($bonComm as $bonComm)
                                 <tr>
-                                    <td>{{ $BonLiv->id }}</td>
-                                    <td>{{ $BonLiv->date }}</td>
-                                    <td>{{ $BonLiv->client->nom}} {{ $BonLiv->client->prenom}}</td>
-                                    <td>{{ $BonLiv->montantTotal }}</td>
-                                    <td>{{ $BonLiv->statut }}</td>
-                                    <td>{{ $BonLiv->echeance }}</td>
-                                    <td>{{ $BonLiv->retard }}</td>
+                                    <td>{{ $bonComm->id }}</td>
+                                    <td>{{ $bonComm->date }}</td>
+                                    <td>{{ $bonComm->client->nom}} {{ $bonComm->client->prenom}}</td>
+                                    <td>{{ $bonComm->montantTotal }}</td>
+                                    <td>{{ $bonComm->status }}</td>
+                                    <td>{{ $bonComm->dateLivraison }}</td>
+                                    <td>{{ $bonComm->retard }}</td>
                                     <td class="text-nowrap">
                                        
-                                        <form action="{{route('DeleteBonLiv',$BonLiv->id)}}" method="POST" class="d-inline">
+                                        <form action="{{route('DeleteBonCm',$bonComm->id)}}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger">
@@ -86,24 +88,22 @@
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            var searchInput = document.getElementById('searchInputBL');
+            var searchInput = document.getElementById('searchInputBN');
             var tableRows = document.querySelectorAll('.table tbody tr');
-        
+    
             searchInput.addEventListener('input', function() {
                 var searchQuery = searchInput.value.toLowerCase();
-        
+    
                 tableRows.forEach(function(row) {
+                    var otherColumn1 = row.querySelector('td:nth-child(2)'); // Ajoutez cette ligne pour sélectionner la deuxième colonne
+                    var otherText = otherColumn1.textContent.toLowerCase();
+
                     var serviceColumn = row.querySelector('td:nth-child(3)');
                     var serviceText = serviceColumn.textContent.toLowerCase();
-        
-                    var otherColumn = row.querySelector('td:nth-child(4)');  
-                    var otherText = otherColumn.textContent.toLowerCase(); 
-        
-                    var otherColumn2 = row.querySelector('td:nth-child(7)'); // Ajoutez cette ligne pour sélectionner la deuxième colonne
-                    var otherText2 = otherColumn2.textContent.toLowerCase();
     
-                    if (serviceText.includes(searchQuery) || otherText.includes(searchQuery) || otherText2.includes(searchQuery)) 
-                    { // Modifiez cette condition pour inclure la deuxième colonne
+                    var otherColumn2 = row.querySelector('td:nth-child(4)'); // Ajoutez cette ligne pour sélectionner la deuxième colonne
+                    var otherText2 = otherColumn2.textContent.toLowerCase();
+                    if (serviceText.includes(searchQuery) || otherText.includes(searchQuery) || otherText2.includes(searchQuery)) {
                         row.style.display = '';
                     } else {
                         row.style.display = 'none';
@@ -111,7 +111,7 @@
                 });
             });
         });
-        </script>
+    </script>
     @include('layouts.footers.auth')
     <style>
         .btn-round-lg{

@@ -32,7 +32,7 @@ class DateFactureController extends Controller
             'dateFacture' => 'required',
         ]);
 
-       DateFacture::create($request->all());
+      
 
         return redirect()->route('facture.index')
             ->with('success', 'date created successfully.');

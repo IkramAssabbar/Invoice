@@ -1,10 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\PasswordRequest;
 use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -13,27 +16,33 @@ class ProfileController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function edit()
+    public function edit(Request $request)
     {
-        return view('profile.edit');
+        $user = User::find($request->id);
+        return view('users.edit')->with('user', $user);
     }
-
+    
     /**
      * Update the profile
      *
      * @param  \App\Http\Requests\ProfileRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(ProfileRequest $request)
+    public function update(Request $request, User $user)
     {
-        if (auth()->user()->id == 1) {
-            return back()->withErrors(['not_allow_profile' => __('You are not allowed to change data for a default user.')]);
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+    
+        if ($request->hasFile('profile_photo')) {
+            $img= $request->file('img_upload');
+            $imgPath = $img->store('public/profiles');
+            $user->img = $imgPath;
         }
-
-        auth()->user()->update($request->all());
-
-        return back()->withStatus(__('Profile successfully updated.'));
+        $user->save();
+    
+        return redirect()->route('users.edit', ['user' => $user->id])->with('success', 'Profil mis à jour avec succès !');
     }
+    
 
     /**
      * Change the password
@@ -41,14 +50,46 @@ class ProfileController extends Controller
      * @param  \App\Http\Requests\PasswordRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function password(PasswordRequest $request)
+    /*public function password(Request $request){
+        
+        $request->validate([
+        'password'=> 'required min:6|max: 100',
+        'newpassword'=> 'required min:6 |max:100',
+        ]);
+        $user=auth()->user() ;
+        if(Hash::check($request->password, $user->password)){
+
+            $user->update([
+               'password'=>bcrypt ($request->newpassword)
+        ]);
+        
+        return redirect()->back()->with('success', 'Password successfully updated.');
+    }else
     {
-        if (auth()->user()->id == 1) {
-            return back()->withErrors(['not_allow_password' => __('You are not allowed to change the password for a default user.')]);
-        }
-
-        auth()->user()->update(['password' => Hash::make($request->get('password'))]);
-
-        return back()->withPasswordStatus(__('Password successfully updated.'));
+        return redirect()->back()->with('error', 'Old password does not catch');
     }
+    
+}*/
+
+    public function updatePassword(Request $request,$id)
+    {
+        dd($request->all());
+       /* $request->validate([
+            'newpassword' => 'required|string|min:8|confirmed',
+        ]);
+
+        // Récupérez l'administrateur authentifié
+       
+        $admin=User::where('id',$id)->first();
+
+        // Mettez à jour le mot de passe de l'administrateur avec le nouveau mot de passe haché
+        $admin->update([
+            'password' => Hash::make($request->input('newpassword')),
+        ]);
+
+        return back()->withSuccess('Profil mis à jour avec succès !');*/
+    }
+
+    
+   
 }

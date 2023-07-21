@@ -103,7 +103,7 @@
                 <div class="mb-3 row">
                     <label for="Nom Catégorie" class="col-sm-4 col-form-label form-label" style="padding-left:30px;">Catégorie</label>
                     <div class="col-sm-8 mb-3 mb-lg-0">
-                        <input type="text" class="form-control " placeholder="Nom de la Catégorie" id="" name="nomCategorie"  style="padding-right:30px;">
+                        <input type="text" class="form-control " placeholder="Nom de la Catégorie" id="" name="categorieName"  style="padding-right:30px;">
                     </div>
                 </div>
                 

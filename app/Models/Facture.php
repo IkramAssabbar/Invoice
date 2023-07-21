@@ -18,7 +18,7 @@ class Facture extends Model
 }
 public function Services()
 {
-    return $this->belongsToMany(Service::class);
+    return $this->belongsToMany(Service::class,'facture_service', 'idFacture', 'idService');
 }
 
 public function getRetardAttribute()

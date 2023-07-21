@@ -105,7 +105,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="{{route('ListesDevis')}}">
                                     {{ __('Devis') }}
                                 </a>
                             </li>
@@ -155,12 +155,12 @@
                     <div class="collapse show" id="navbar-examples-contact">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="{{route('client.index')}}">
                                     <!-- <i class=" fa-regular fa-file-invoice" style="color: #4297cd;"></i> -->
                                     <span>{{ __('Client') }}</span>
                                   
                                 </a>
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="{{route('fournisseur.index')}}">
                                     <!-- <i class=" fa-regular fa-file-invoice" style="color: #4297cd;"></i> -->
                                     <span>{{ __('Fournisseur') }}</span>
                                   

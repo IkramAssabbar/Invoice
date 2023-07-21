@@ -17,7 +17,7 @@ class BonCommande extends Model
 }
 public function Services()
 {
-    return $this->belongsToMany(Service::class);
+    return $this->belongsToMany(Service::class,'bon_commande_services','idBonCommd', 'idService');
 }
 
 public function getRetardAttribute()

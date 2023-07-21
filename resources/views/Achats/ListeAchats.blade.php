@@ -30,7 +30,7 @@
                     </div>
                    
                         <div class="col-md-3">
-                            <form method="GET" action="{{ route('services.export') }}" class="mb-3">
+                            <form method="GET" action="{{ route('charge.export') }}" class="mb-3">
                                 <button type="submit" class="btn btn-dark btn-round-lg" >+ Exporter vos Achats</button>
                             </form>
                         </div>

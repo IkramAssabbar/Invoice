@@ -81,7 +81,7 @@ class FactureReccurentesController extends Controller
     public function store(Request $request)
  {
         $factureR = new FactureReccurente();
-    $factureR->IdClient = $request->input('user_id');
+    $factureR->IdClient = 1;
     $factureR->date = $request->input('date');
     $factureR->echeance = $request->input('echeance');
     $factureR->remise = $request->input('remise');
@@ -89,6 +89,7 @@ class FactureReccurentesController extends Controller
     $factureR->montantHtva = $request->input('montantHtva');
     $factureR->montantTotal = $request->input('montantTotal');
     $factureR->datereccur=$request->input('date_envoi');
+    $factureR->status='En attente';
     $factureR->save();
 
     $idservices = explode(",", $request->input('tab'));
@@ -129,12 +130,12 @@ class FactureReccurentesController extends Controller
     public function showAllFactures()
     {
         $factures = FactureReccurente::all();
-        return view('Ventes.ListesFacturesRecu',compact('factures'));
+        return view('Ventes.Listes.ListesFacturesRecu',compact('factures'));
     }
     public function showBodyMail()
     {
       
-        return view('Ventes.bodyMailRecu');
+        return view('Ventes.Mail.bodyMailRecu');
     }
     /**
      * Display the specified resource.
@@ -185,6 +186,34 @@ class FactureReccurentesController extends Controller
             
         ]);
         return Excel::download(new FactureRecurExport, 'factures_Recurentes.xlsx');
+    }
+    public function telecharger(Request $request,FactureReccurente $facture)
+    {
+       // $factureid = $request->input('id');
+
+        $factureid = $facture->id;
+       // $factureExistante = Facture::find($factureid);
+        $IdClient = $request->input('user_id');
+        $client=Client::find($IdClient);
+        $date = $request->input('date');
+        $echeance = $request->input('echeance');
+   $remise = $request->input('remise');
+    $tva = $request->input('TvaV');
+   $montantHtva = $request->input('montantHtva');
+   $montantTotal = $request->input('montantTotal');
+
+   $idservices = explode(",", $request->input('tab'));
+   $entreprises = Entreprise::all();
+      $services = Service::whereIn('id', $idservices)->get();
+
+        $pdf = app()->make('dompdf.wrapper');
+
+        $pdf->loadView('upload.facture_reccure', compact('client', 'date','echeance','remise','tva','montantHtva','montantTotal','services','entreprises'));
+
+        return $pdf->download('facture_reccurent.pdf');
+    
+   
+       
     }
        
 }

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\chargeExport;
 use App\Models\CategorieCh;
 use App\Models\Charge;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AchatController extends Controller
 {
@@ -91,5 +93,9 @@ class AchatController extends Controller
         $achat->delete();
         return redirect()->route('ListesAchats')
         ->with('success', 'Service deleted successfully.');
+    }
+    public function export() 
+    {
+        return Excel::download(new chargeExport, 'charges.xlsx');
     }
 }

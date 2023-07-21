@@ -32,7 +32,7 @@
                                 </button>
                             </div>
                             <div class="col-md-12 mb-3">
-                                <button type="button" class="btn btn-primary btn-block mb-3" style="background-color: rgb(27, 164, 210);">
+                                <button type="submit" class="btn btn-primary btn-block mb-3" style="background-color: rgb(27, 164, 210);" formaction="{{ route('factureRec.telecharger') }}" formmethod="POST">
                                     <i class="fas fa-download"></i> Télécharger
                                 </button>
                             </div>
@@ -111,8 +111,9 @@
                                     créez un client</h4>
                                 <div class="d-flex align-items-center">
                                     <img src="{{ asset('argon') }}/img/brand/fleche.png" alt="" style="width: 50px;">
-                                    <select class="form-select" name="user_id">
+                                    <select class="form-select" name="user_id" selected disabled>
                                         @foreach ($clients as $item)
+                                        <option value="0">Aux Clients Abonnés</option>
                                         <option value="{{$item->id}}">{{$item->nom}} {{$item->prenom}}</option>
                                         
                                         @endforeach

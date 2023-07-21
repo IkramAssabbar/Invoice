@@ -23,7 +23,7 @@
                     <div class="card-header d-flex justify-content-between">
                        <div class="col-md-4"> 
                         <form method="GET" action="{{ route('factureRecurentes') }}">
-                            <button type="submit" class="btn btn-success btn-round-lg">+ Créer une facture Récurrente</button>
+                            <button type="submit" class="btn btn-info btn-round-lg">+ Créer une facture Récurrente</button>
                         </form>
                     </div>
                         <div class="col-md-3">
@@ -48,7 +48,7 @@
                             <tr>
                                 <th scope="col">Facture</th>
                                 <th scope="col">Date</th>
-                                <th scope="col">Client</th>
+                               
                                 <th scope="col">Montant</th>
                                 <th scope="col">Statut</th>
                                 <th scope="col">Échéance</th>
@@ -61,7 +61,7 @@
                                 <tr>
                                     <td>{{ $facture->id }}</td>
                                     <td>{{ $facture->date }}</td>
-                                    <td>{{ $facture->client->nom}} {{ $facture->client->prenom}}</td>
+                                   
                                     <td>{{ $facture->montantTotal }}</td>
                                     <td>{{ $facture->status }}</td>
                                     <td>{{ $facture->echeance }}</td>

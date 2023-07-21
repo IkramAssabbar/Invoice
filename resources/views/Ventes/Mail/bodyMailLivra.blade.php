@@ -16,17 +16,16 @@
             </div>
             <div class="card cards card-2 text-center">
                 <div class="card-body">
-                    <form action="{{route('sendMailCmd')}}" method="GET">
+                    <form action="{{route('sendMailLivrai')}}" method="GET">
                         <div class="form-group row">
                           <?php $client = session('client'); ?>
-                          <?php $BonCom = session('BonCom'); ?>
+                          <?php $BonLiv = session('BonLiv'); ?>
                             <label for="sujet" class="col-auto col-form-label">Sujet :</label>
                             <div class="col">
                               <input type="text" class="form-control" id="" placeholder="Sujet" name="subject" value="MGA Invoice Notify">
                               <input type="hidden" class="form-control" id="" placeholder="destinataire" name="destin" value="{{ $client->email }}">
-                              <input type="hidden" class="form-control" id="" placeholder="idfacture" name="BonComid" value="{{$BonCom->id }}">
+                              <input type="hidden" class="form-control" id="" placeholder="idfacture" name="Bonlivid" value="{{$BonLiv->id }}">
                               <input type="hidden" class="form-control" id="" placeholder="destinataire" name="clientname" value="{{ $client->nom . ' ' . $client->prenom }}">
-
 
                             </div>
                           </div>
@@ -34,7 +33,7 @@
                           <div class="form-group row">
                             <label for="body" class="col-auto col-form-label">Texte :</label>
                             <div class="col">
-                              <textarea type="text" class="form-control" id="" placeholder="message à inclure" name="body">Bonjour,Veuillez trouver ci-joint votre facture de MGA</textarea>
+                              <textarea type="text" class="form-control" id="" placeholder="message à inclure" name="body">Bonjour,Veuillez trouver ci-joint votre Bon de Livraison de MGA</textarea>
                             </div>
                           </div>
                           <button type="submit"  class="btn btn-primary  btn-block mb-3" style="background-color: rgb(27, 164, 210);">Valider</button>

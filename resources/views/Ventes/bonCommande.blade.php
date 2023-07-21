@@ -20,19 +20,19 @@
      <form action="{{route('bonCommnd.store')}}" method="post">
         @csrf 
          <div class="row">
-            <div class="col-xl-3 order-xl-1 mb-5 mb-xl-0">
+            <div class="col-xl-2 order-xl-2 mb-5 mb-xl-2">
              
                 <div class="card-body pt-0 pt-md-4">
                     
                     <div class="text-center">
                         <div class="row" style="position: fixed">
                             <div class="col-md-12 mb-3">
-                                <button type="submit" class="btn btn-primary btn-block mb-3" style="background-color: rgb(27, 164, 210);">
+                                <button type="submit" class="btn btn-primary btn-block mb-3" style="background-color: rgb(27, 164, 210);"disabled id="btnEnvoyer" disabled>
                                     <i class="fas fa-paper-plane"></i> Envoyer
                                 </button>
                             </div>
                             <div class="col-md-12 mb-3">
-                                <button type="button" class="btn btn-primary btn-block mb-3" style="background-color: rgb(27, 164, 210);">
+                                <button type="submit" class="btn btn-primary btn-block mb-3" style="background-color: rgb(27, 164, 210);" formaction="{{ route('bonCommande.telecharger') }}" formmethod="POST" id="btnTelecharger" disabled>
                                     <i class="fas fa-download"></i> Télécharger
                                 </button>
                             </div>
@@ -45,7 +45,7 @@
                 </div>
              </div>
                 
-            <div class="col-xl-9 order-xl-0">
+            <div class="col-xl-10 order-xl-0">
                 <div class="card bg-secondary shadow">
                     <div class=" bg-blu" style="padding: 0rem 1.5rem">
                         <div class="row align-items-center">
@@ -87,20 +87,25 @@
 
 
                             <div class="col-md-6">
-                                <h4 style="font-family: cursive; color:rgb(27, 164, 210);margin-left: 50px;">Choisissez ou
-                                    créez un client</h4>
-                                <div class="d-flex align-items-center">
-                                    <img src="{{ asset('argon') }}/img/brand/fleche.png" alt="" style="width: 50px;">
-                                    <select class="form-select" name="user_id">
-                                        @foreach ($clients as $item)
-                                        <option value="{{$item->id}}">{{$item->nom}} {{$item->prenom}}</option>
-                                        
-                                        @endforeach
-                                    </select>
+
+                                <div class="input-group" style="width: 280px">
+                                    <img src="{{ asset('argon') }}/img/brand/fleche.png" alt="" style="width: 40px;">
+                                    <h4 style="font-family: cursive; color:rgb(41, 136, 220);">Choisissez ou créez un client</h4>
+                                    <div class="input-group"  >
+                                        <select class="form-select"  onchange="handleClientSelectChange(this)">
+                                            <option value="" disabled selected>Choisissez ou créez un client</option>
+                                            @foreach ($clients as $item)
+                                            <option value="{{$item->id}}">{{$item->nom}} {{$item->prenom}}</option>
+
+                                            @endforeach
+                                            <option value="add-client" style="font-family: cursive; color:rgb(41, 136, 220);font-size=12px;">Creer un nouveau client</option>
+
+                                        </select>
+                                    </div>
                                 </div>
                                 
-                              
-                        </div>
+                                
+                            </div>
  </form>   
                     
                             
@@ -177,8 +182,8 @@
                                 <b-form-textarea name="" id="textdate" cols="30" no-resize readonly data-bs-toggle="modal"
                                     data-bs-target="#myModale" class="custom-textarea">
                                     <b style="color:rgb(27, 164, 210)">Bon de Commande</b> <br>
-                                    Date: <span id="dateValue" name="date" class="dateValue"></span> <br>
-                                    Date Livraison: <span id="echeanceValue" name="echeance" class="echeanceValue"></span> <br>
+                                    Date: <span id="dateValue" name="date" class="dateValue" contenteditable="true"></span> <br>
+                                    Date Livraison: <span id="echeanceValue" name="echeance" class="echeanceValue" contenteditable="true"></span> <br>
                                 </b-form-textarea>
 
                                     
@@ -235,7 +240,7 @@
                                 <th scope="col">Libellé</th>
                                 
                                 <th scope="col">Prix</th>
-                                <th scope="col">Remise</th>
+                               
                                 <th scope="col">TVA</th>
                                 <th scope="col">Description</th>
                               </tr>
@@ -281,7 +286,6 @@
                                                                 <th scope="col">Libellé</th>
                                                                 
                                                                 <th scope="col">Prix</th>
-                                                                <th scope="col">Remise</th>
                                                                 <th scope="col">TVA</th>
                                                                 <th scope="col">Description</th>
                                                                 
@@ -401,7 +405,6 @@
                                                                     <td><select  id="service" onchange="getServiceInfo()" class="mb-3 service champ-ligne"></select></td>
                                                                     <td> <input type="text" id="prixService"  placeholder="Prix" class="prix-service champ-ligne" style="width: 60px" name="Prix" ></td>
                                                                     <td ><input type="text" id="remiseService"  placeholder="TVA" class="remise-service champ-ligne" style="width: 60px" name="Tva" ></td>
-                                                                    <td><input type="text" id="prixServicee"  placeholder="Rmse" class="champ-ligne" style="width: 60px" ></td>
                                                                     <td><textarea  id="description"  rows="2" name="Description" class="description-service champ-ligne"></textarea></td>
                                                                     <input type="hidden" id="service_id" name="id" class="service-id">
 
@@ -465,7 +468,7 @@
                                     <thead>
                                     <tr> 
                                             <td id="prcRemise">Remise globale:</td>
-                                            <td style="padding-left: 20px;" id="remiselabel"></td>
+                                            <td style="padding-left: 20px;" id="remiselabel" contenteditable="true"></td>
                                         </tr>
                                         <tr> <td>Total HTVA</td> 
                                                 <td style="padding-left: 20px;" id="thva"></td> 
@@ -477,7 +480,7 @@
                                                 <br>
                                             </tr>
                                             <tr>  <th>Total </th>
-                                                <th style="padding-left: 20px;" id="montant" class="montant"></th>
+                                                <th style="padding-left: 20px;" id="montant" class="montant" contenteditable="true"></th>
                                             </tr>
                                     
                                     </thead>
@@ -578,7 +581,79 @@
                                     </tr>
                                 </table>
                             </div>
-            
+                            <div class="modal fade" id="addClientModal" tabindex="-1" aria-labelledby="addClientModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h2 class="modal-title"  style="font-family: cursive; color:rgb(27, 164, 210);">Crrer un nouveau client</h2>
+                                        </div>
+                                        
+                                    <form method="POST" action="{{ route('client.store') }}">
+                                        @csrf
+                                        <div class="modal-body">
+                                               
+                                            
+                                            <!-- Champs de saisie pour le nouveau client -->
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <input type="text" class="form-control" id="newClientICE" name="ice" placeholder="ICE">
+                                                    @error('ice')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <input type="text" class="form-control" id="newClientIF" name="if" placeholder="Identifiant fiscale*">
+                                                    @error('if')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <input type="text" class="form-control" id="newClientName" name="nom" placeholder="Nom*">
+                                                    
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <input type="text" class="form-control" id="newClientPreName" name="prenom" placeholder="Prenom*">
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <input type="text" class="form-control" id="newClientAdresse" name="adresse" placeholder="Adresse*">
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <input type="text" class="form-control" id="newClientVille" name="ville" placeholder="Ville*">
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <input type="text" class="form-control" id="newClientCP" name="cp" placeholder="CP*">
+                                                    @error('cp')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <select class="form-select" id="NewClientPays" name="Pays" style="color:rgb(95, 94, 94)">
+                                                        @foreach ($countries as $country)
+                                                            <option value="{{ $country['name'] }}" @if ($country['name'] === 'Morocco') selected @endif>{{ $country['name'] }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <input type="email" class="form-control" id="newClientAdresseEMail" name="email" placeholder="Adresse e-mail*" required>                                               
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <input type="text" class="form-control" id="newClientTel" name="tel" placeholder="Telephone">
+                                                    @error('tel')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                
+                                            </div>
+                                           
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                            <button type="submit" class="btn btn-primary" id="btnEnregistrer" >Enregistrer</button>
+                                        </div>
+                                    </form>
+                                    </div>
+                                </div>
+                            </div>
                             <div>
                                 <br>
                                 <br>
@@ -615,6 +690,65 @@
        
     </div>
     <br>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script>
+    function handleClientSelectChange(selectElement) {
+        if (selectElement.value === 'add-client') {
+            $('#addClientModal').modal('show');
+            selectElement.selectedIndex = 0;
+        } else {
+            var clientId = selectElement.value;
+            console.log(clientId);
+            var url = '/devis/clients/' + clientId;
+    
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function(response) {
+                    console.log(response); 
+                    var clientInfo = '<div class="client-info" style="margin-left:37px;">' +
+                    
+                        '<b>Nom: ' + response.nom + '</b><br>' +
+                        '<b>Prénom: ' + response.prenom + '</b> <br>' +
+                        '<b>ICE: ' + response.ice + '</b><br>' +
+                        '<b>Adresse: ' + response.adresse + '</b> <br>' +
+                        '<b>CP: ' + response.cp + '</p> <br>' +
+                            '<input type="hidden" name="user_id" id="user_id" value="' + response.id + '">' +
+
+                        '</div>';
+                    
+                    $(selectElement).replaceWith(clientInfo);
+                    $(document).on('click', '.client-info', 
+                    function() {
+                        var nom = response.nom;
+                        var prenom = response.prenom;
+                        var ice = response.ice;
+                        var adresse = response.adresse;
+                        var cp = response.cp;
+                        $('#editClientModal').modal('show');
+                        $('#editClientName').val(nom);
+                        $('#editClientPrenom').val(prenom);
+                        $('#editClientICE').val(ice);
+                        $('#editClientAdresse').val(adresse);
+                        $('#editClientCP').val(cp);
+    
+        
+                    selectElement.selectedIndex = 0;
+                    });
+                    verifierChamps();
+
+                },
+                error: function(xhr, status, error) {
+                    console.log(error);
+                    $('.client-info').html('<p>Une erreur s\'est produite lors de la récupération des informations du client.</p>');
+                }
+            });
+        }
+    }
+     </script>
     @include('layouts.footers.auth')
 @endsection
 <style>

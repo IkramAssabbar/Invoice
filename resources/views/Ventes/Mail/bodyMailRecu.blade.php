@@ -32,7 +32,7 @@
                           <div class="form-group row">
                             <label for="body" class="col-auto col-form-label">Texte :</label>
                             <div class="col">
-                              <textarea type="text" class="form-control" id="" placeholder="message à inclure" name="body">Bonjour,Veuillez trouver ci-joint votre facture de MGA</textarea>
+                              <textarea type="text" class="form-control" id="" placeholder="message à inclure" name="body">Bonjour,Veuillez trouver ci-joint votre facture Recurrente de MGA</textarea>
                             </div>
                           </div>
                           <button type="submit"  class="btn btn-primary  btn-block mb-3" style="background-color: rgb(27, 164, 210);">Valider</button>

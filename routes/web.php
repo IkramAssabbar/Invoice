@@ -12,9 +12,9 @@ use App\Http\Controllers\BonCommandeController;
 use App\Http\Controllers\BonLivraisonController;
 use App\Http\Controllers\CategorieChController;
 use Illuminate\Support\Facades\Auth;
-
-
-
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\DevisController;
+use App\Http\Controllers\ProfileController;
 
 /*
 /*
@@ -51,13 +51,21 @@ Route::put('/factures/Data/{entreprise}', [FactureController::class, 'updateDATA
 Route::post('/factures', [FactureController::class, 'store'])->name('Factures.store');
 Route::delete('/DeleteFactures/{facture}', [FactureController::class, 'destroy'])->name('DeleteFacture');
 
-//Route::put('/factures /{service}', [FactureController::class, 'updateService'])->name('service.update');
 
+//telechargement des pieces
+Route::post('/telecharger-facture',[FactureController::class,'telecharger'])->name('facture.telecharger');
+Route::post('/telecharger-factureRec',[FactureReccurentesController::class,'telecharger'])->name('factureRec.telecharger');
+Route::post('/telecharger-bonCommande',[BonCommandeController::class,'telecharger'])->name('bonCommande.telecharger');
+Route::post('/telecharger-bonLiv',[BonLivraisonController::class,'telecharger'])->name('bonLiv.telecharger');
+Route::post('/telecharger-devis',[DevisController::class,'telecharger'])->name('devis.telecharger');
+
+//envoie de mail
 
 Route::get('/sendmailreccurent', [MailController::class, 'indexrecu'])->name("sendMailReccure");
 Route::get('/sendmail', [MailController::class, 'index'])->name("sendMail");
 Route::get('/sendMailLivrai', [MailController::class, 'indexLivrai'])->name("sendMailLivrai");
 Route::get('/sendMailCmd', [MailController::class, 'indexComm'])->name("sendMailCmd");
+Route::get('/sendMailDevis', [MailController::class, 'indexDevis'])->name("sendMailDevis");
 
 
 Route::get('/categories/{id}',[CategorieController::class,'show'])->name('show');
@@ -118,6 +126,7 @@ Route::post('/storeAchats', [AchatController::class, 'store'])->name('achats.sto
 Route::get('/achats/{achat}/edit', [AchatController::class, 'edit'])->name('achats.edit');
 Route::put('/achats/{achat}', [AchatController::class, 'update'])->name('achats.update');
 Route::delete('/achats/{achat}', [AchatController::class, 'destroy'])->name('achat.destroy');
+Route::get('/cahrgesExport', [AchatController::class, 'export'])->name('charge.export');
 
 
 
@@ -129,12 +138,44 @@ Route::put('/categoriesch/{categorie}', [CategorieChController::class, 'update']
 Route::get('/categoriesch/{categorie}/edit', [CategorieChController::class, 'edit'])->name('categoriech.edit');
 Route::delete('/categoriesch/{categorie}', [CategorieChController::class, 'destroy'])->name('categoriech.delete');
 
+//client
+Route::post('/clients', [ClientController::class,'store'])->name('client.store');
 
+Route::get('/devis',[DevisController::class,'index'])->name('devis.index');
+Route::get('/devis/clients/{id}', [ClientController::class,'show']);
+Route::post('/devis', [DevisController::class, 'store'])->name('devis.store');
+Route::get('/bodyMailDevis', [DevisController::class, 'showBodyMail'])->name('bodyMailDevis');
+Route::get('/ListesDevis', [DevisController::class, 'showAlldevis'])->name('ListesDevis');
+Route::get('/devisExport', [DevisController::class, 'export'])->name('devis.export');
 
+//
+Route::post('/clients', [App\Http\Controllers\ClientController::class,'store'])->name('client.store');
+	Route::get('/client', [App\Http\Controllers\ClientController::class,'index'])->name('client.index');
+	Route::get('/client/create', [App\Http\Controllers\ClientController::class, 'create'])->name('client.create');
+	Route::delete('/clients/{client}', [ClientController::class, 'destroy'])->name('client.destroy');
+	Route::delete('/client/destroy-multiple', [ClientController::class, 'destroyMultiple'])->name('client.destroyMultiple');
+	Route::get('/devis/clients/{id}', [App\Http\Controllers\ClientController::class,'show']);
+	Route::get('/clientedit/{id}/', [App\Http\Controllers\ClientController::class, 'edit'])->name('client.edit');
+	Route::put('/clientupdate/{client}', [App\Http\Controllers\ClientController::class, 'update'])->name('client.update');
+	
+	Route::get('/fournisseur', [App\Http\Controllers\FournisseurController::class,'index'])->name('fournisseur.index');
+	Route::get('/fournisseur/create', [App\Http\Controllers\FournisseurController::class, 'create'])->name('fournisseur.create');
+	Route::post('/fournisseurs', [App\Http\Controllers\FournisseurController::class,'store'])->name('fournisseur.store');
+	Route::delete('/fournisseurs/{fournisseur}', [App\Http\Controllers\FournisseurController::class, 'destroy'])->name('fournisseur.destroy');
+	Route::get('/fournisseur/{id}/', [App\Http\Controllers\FournisseurController::class, 'edit'])->name('fournisseur.edit');
+	Route::put('/fournisseurs/{fournisseur}', [App\Http\Controllers\FournisseurController::class, 'update'])->name('fournisseur.update');
 
+    Route::get('/export/clients', [App\Http\Controllers\ClientController::class, 'export'])->name('client.export');
+	Route::post('/import/clients', [App\Http\Controllers\ClientController::class, 'import'])->name('client.import');
+	Route::get('/export/fournisseurs', [App\Http\Controllers\FournisseurController::class, 'export'])->name('fournisseur.export');
+	Route::post('/import/fournisseurs', [App\Http\Controllers\FournisseurController::class, 'import'])->name('fournisseur.import');
 
-
-
+//Route::get('profile', ['as' => 'profile.edit', 'uses' => 'App\Http\Controllers\ProfileController@edit'])->name('profile');
+//	Route::put('profile', ['as' => 'profile.update', 'uses' => 'App\Http\Controllers\ProfileController@update']);
+	Route::put('/change-password', [App\Http\Controllers\UserController::class,'updatePassword'])->name('change.password');
+	
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profileUpdate', [ProfileController::class, 'update'])->name('profile.update');
 
 
 
@@ -158,12 +199,12 @@ Route::get('/servicessViewimport', [ServiceController::class, 'viewImport'])->na
 
 
 
-	Route::put('profile', ['as' => 'profile.update', 'uses' => 'App\Http\Controllers\ProfileController@update']);
+	//Route::put('profile', ['as' => 'profile.update', 'uses' => 'App\Http\Controllers\ProfileController@update']);
 	Route::get('upgrade', function () {return view('pages.upgrade');})->name('upgrade'); 
 	 Route::get('map', function () {return view('pages.maps');})->name('map');
 	 Route::get('icons', function () {return view('pages.icons');})->name('icons'); 
 	 Route::get('table-list', function () {return view('pages.tables');})->name('table');
-	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'App\Http\Controllers\ProfileController@password']);
+	//Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'App\Http\Controllers\ProfileController@password']);
 });
 
 

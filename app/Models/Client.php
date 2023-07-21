@@ -14,21 +14,23 @@ class Client extends Model
     protected $fillable =[
         'id',	
         'email',	
-        'email_verified_at',	
-        'password'	,
+       
         'nom'	,
         'prenom',	
         'tel'	,
         'if'	,
         'pays'	,
         'ice'	,
-        'cp'] ;
+        'cp','adresse','ville'] ;
                 
                 public function factures()
         {
             return $this->hasMany(Facture::class);
         }
-
+        public function devis()
+        {
+            return $this->hasMany(Devis::class);
+        }
         public function facturesReccurentes()
         {
             return $this->hasMany(FactureReccurente::class);
@@ -36,6 +38,10 @@ class Client extends Model
         public function bonCommandes()
         {
             return $this->hasMany(BonCommande::class);
+        }
+        public function bonLivraisons()
+        {
+            return $this->hasMany(bonLivraisons::class);
         }
 
 }

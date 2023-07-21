@@ -12,10 +12,26 @@ class Service extends Model
    
     public function Factures()
 {
-    return $this->belongsToMany(Facture::class);
+    return $this->belongsToMany(Facture::class,'facture_service', 'idFacture', 'idService');
+}
+public function FacturesReccurentes()
+{
+    return $this->belongsToMany(FactureReccurente::class,'facture_rec_services', 'idFactureRecu', 'idServiceRec');
+}
+public function BonCommandes()
+{
+    return $this->belongsToMany(BonCommande::class,'bon_commande_services', 'idBonCommd', 'idService');
+}
+public function BonLivraisons()
+{
+    return $this->belongsToMany(BonLivraison::class,'bon_livraison_services', 'idBonLivr', 'idService');
 }
 public function Categorie()
 {
     return $this->belongsTo(Categorie::class,'IdCategorie');
+}
+public function Devis()
+{
+    return $this->belongsToMany(Devis::class,'devis_services', 'idDevis', 'idService');
 }
 }

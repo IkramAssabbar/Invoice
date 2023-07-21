@@ -13,6 +13,8 @@ use App\Models\BonCommandeService;
 use App\Models\Historique;
 use Auth;
 use Maatwebsite\Excel\Facades\Excel;
+use Webpatser\Countries\Countries;
+
 class BonCommandeController extends Controller
 {
     
@@ -22,13 +24,16 @@ class BonCommandeController extends Controller
         $clients = Client::all();
         $services=Service::all();
         $categories=Categorie::all();
+        $countries = (new Countries())->getList();
+        $selectedClient = null; 
     
         return view('Ventes.bonCommande', [
             'entreprises' => $entreprises,
             'clients' => $clients,
             'services'=>$services,
-            'categories'=>$categories
-            
+            'categories'=>$categories,
+            'countries' =>$countries,
+            'selectedClient'=>$selectedClient
         ]);
     }
 
@@ -87,6 +92,7 @@ class BonCommandeController extends Controller
     $BonCom->tva = $request->input('TvaV');
     $BonCom->montantHtva = $request->input('montantHtva');
     $BonCom->montantTotal = $request->input('montantTotal');
+    $BonCom->status='En attente';
     $BonCom->save();
 
     $idservices = explode(",", $request->input('tab'));
@@ -120,12 +126,12 @@ class BonCommandeController extends Controller
     public function showAllBonCommande()
     {
         $bonComm = BonCommande::all();
-        return view('Ventes.ListesBonCmd',compact('bonComm'));
+        return view('Ventes.Listes.ListesBonCmd',compact('bonComm'));
     }
     public function showBodyMail()
     {
       
-        return view('Ventes.bodyMailCmd');
+        return view('Ventes.Mail.bodyMailCmd');
     }
     /**
      * Display the specified resource.
@@ -176,6 +182,34 @@ class BonCommandeController extends Controller
             
         ]);
         return Excel::download(new BonCommandExport, 'Bon_Commande.xlsx');
+    }
+    public function telecharger(Request $request,BonCommande $facture)
+    {
+       // $factureid = $request->input('id');
+
+        $factureid = $facture->id;
+       // $factureExistante = Facture::find($factureid);
+        $IdClient = $request->input('user_id');
+        $client=Client::find($IdClient);
+        $date = $request->input('date');
+        $echeance = $request->input('echeance');
+   $remise = $request->input('remise');
+    $tva = $request->input('TvaV');
+   $montantHtva = $request->input('montantHtva');
+   $montantTotal = $request->input('montantTotal');
+
+   $idservices = explode(",", $request->input('tab'));
+   $entreprises = Entreprise::all();
+      $services = Service::whereIn('id', $idservices)->get();
+
+        $pdf = app()->make('dompdf.wrapper');
+
+        $pdf->loadView('upload.bonCommande', compact('client', 'date','echeance','remise','tva','montantHtva','montantTotal','services','entreprises'));
+
+        return $pdf->download('bonCommande.pdf');
+    
+   
+       
     }
        
 }

@@ -188,6 +188,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Route'     => "Illuminate\Support\Facades\Route",
+     
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 

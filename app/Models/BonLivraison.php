@@ -9,6 +9,7 @@ use App\Models\Client;
 class BonLivraison extends Model
 {
     use HasFactory;
+    
     protected $fillable = ['id','date','echeance','status','montantTotal','montantHtva','tva','remise','IdClient'];
 
     public function Client()
@@ -17,7 +18,7 @@ class BonLivraison extends Model
 }
 public function Services()
 {
-    return $this->belongsToMany(Service::class);
+    return $this->belongsToMany(Service::class,'bon_livraison_services', 'idBonLivr', 'idService');
 }
 
 public function getRetardAttribute()

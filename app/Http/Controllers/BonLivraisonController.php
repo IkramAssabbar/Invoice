@@ -13,6 +13,7 @@ use App\Models\BonLivraisonService;
 use App\Models\Historique;
 use Auth;
 use Maatwebsite\Excel\Facades\Excel;
+use Webpatser\Countries\Countries;
 
 class BonLivraisonController extends Controller
 {
@@ -22,13 +23,16 @@ class BonLivraisonController extends Controller
         $clients = Client::all();
         $services=Service::all();
         $categories=Categorie::all();
+        $countries = (new Countries())->getList();
+        $selectedClient = null; 
     
         return view('Ventes.BonLivrais', [
             'entreprises' => $entreprises,
             'clients' => $clients,
             'services'=>$services,
-            'categories'=>$categories
-            
+            'categories'=>$categories,
+            'countries' =>$countries,
+            'selectedClient'=>$selectedClient
         ]);
     }
 
@@ -88,10 +92,16 @@ class BonLivraisonController extends Controller
     $BonLiv->montantHtva = $request->input('montantHtva');
     $BonLiv->montantTotal = $request->input('montantTotal');
     $BonLiv->adresse = $request->input('adresseValue');
+        $BonLiv->status='En attente';
     $BonLiv->save();
 
     $idservices = explode(",", $request->input('tab'));
-    
+    foreach ($idservices as $serviceId) {
+        $BonComService = new BonLivraisonService();
+        $BonComService->idBonLivr = $BonLiv->id;
+        $BonComService->idService = $serviceId;
+        $BonComService->save();
+    }
 
     $client = Client::find($BonLiv->IdClient );
     
@@ -116,12 +126,12 @@ class BonLivraisonController extends Controller
     public function showAllbonLivraison()
     {
         $BonLiv = BonLivraison::all();
-        return view('Ventes.ListesbonLivraison',compact('BonLiv'));
+        return view('Ventes.Listes.ListesbonLivraison',compact('BonLiv'));
     }
     public function showBodyMail()
     {
       
-        return view('Ventes.bodyMailLivra');
+        return view('Ventes.Mail.bodyMailLivra');
     }
     /**
      * Display the specified resource.
@@ -172,5 +182,33 @@ class BonLivraisonController extends Controller
         ]);
         return Excel::download(new BonLivraisonExport, 'Bon_Livraison.xlsx');
     }
+    public function telecharger(Request $request,BonLivraison $facture)
+    {
+       // $factureid = $request->input('id');
+
+        $factureid = $facture->id;
+       // $factureExistante = Facture::find($factureid);
+        $IdClient = $request->input('user_id');
+        $client=Client::find($IdClient);
+        $date = $request->input('date');
+        $echeance = $request->input('echeance');
+   $remise = $request->input('remise');
+    $tva = $request->input('TvaV');
+   $montantHtva = $request->input('montantHtva');
+   $montantTotal = $request->input('montantTotal');
+$adresse=$request->input('adresseValue');
+//dd($adresse);
+   $idservices = explode(",", $request->input('tab'));
+   $entreprises = Entreprise::all();
+      $services = Service::whereIn('id', $idservices)->get();
+
+        $pdf = app()->make('dompdf.wrapper');
+
+        $pdf->loadView('upload.bonLiv', compact('client', 'date','echeance','remise','tva','montantHtva','montantTotal','services','entreprises','adresse'));
+
+        return $pdf->download('bon_Livraison.pdf');
+    
+   
        
+    }
 }

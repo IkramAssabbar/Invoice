@@ -93,6 +93,9 @@ document.getElementById('myModal').addEventListener('click', function() {
     // Vous pouvez envoyer le tableauValeurs via une requête AJAX ou l'utiliser comme vous le souhaitez
 }
    var tableauServices = [];
+   var tableauIdsServices = [];
+   
+  
    function enregistrerService() {
      //document.getElementById("btnEnregistrer").classList.add("hidden");
   
@@ -114,7 +117,7 @@ document.getElementById('myModal').addEventListener('click', function() {
 
        tableauServices.push(ligneService);
        // Créez un nouveau tableau contenant uniquement les ID des services
-var tableauIdsServices = tableauServices.map(function(ligneService) {
+ tableauIdsServices = tableauServices.map(function(ligneService) {
   return ligneService.idService;
 });
 
@@ -125,18 +128,10 @@ document.getElementById("tableauIdsServicesInput").value = tableauIdsServices.jo
        // Convertir le tableauServices en une chaîne JSON
 var servicesJSON = JSON.stringify(tableauServices);
 console.log(servicesJSON);
-// Effectuer une requête AJAX vers votre endpoint Laravel pour enregistrer les services
 
-
-
-      // document.getElementById("btnAjouter").removeAttribute("disabled");
-       
-    // Récupérer l'élément tbody où ajouter les lignes du tableau
 var resultatElement = document.getElementById("resultat");
 resultatElement.innerHTML = "";
-// Récupérer les éléments des colonnes existantes
-//var libelleServiceElement = document.getElementById("LibelleService");
-//var libelleCategorieElement = document.getElementById("LibelleCategorie");
+
 var i = 0;
 var previousLine = null;
 // Parcourir le tableau de services
@@ -172,9 +167,7 @@ if (!isDuplicate) {
  var tvaCell = nouvelleLigne.insertCell();
  var descriptionCell = nouvelleLigne.insertCell();
 
- // Remplir les cellules avec les valeurs
- //libelleCategorieCell.appendChild(document.createTextNode(libelleCategorieElement.value));
- //libelleServiceCell.appendChild(document.createTextNode(libelleServiceElement.value));
+ 
  libelleServiceCell.textContent=libelle;
  libelleCategorieCell.textContent=categorie;
  prixCell.textContent = prix;
@@ -187,15 +180,69 @@ if (!isDuplicate) {
 
  
      console.log(tableauServices);
-     
+   
+     updateTable();
+    
+
      // Vous pouvez envoyer le tableauValeurs via une requête AJAX ou l'utiliser comme vous le souhaitez
     
     // Vous pouvez envoyer le tableauValeurs via une requête AJAX ou l'utiliser comme vous le souhaitez
 }
 function supprimerDerniereLigne() {
-  if (tableauServices.length > 0) {
+  if (tableauServices.length >= 0) {
     tableauServices.pop();
     console.log(tableauServices);
+  }
+ 
+  tableauIdsServices = tableauServices.map(function(ligneService) {
+    return ligneService.idService;
+  });
+
+  console.log(tableauIdsServices);
+  document.getElementById("tableauIdsServicesInput").value = tableauIdsServices.join(",");
+
+  // Mettez à jour l'affichage du tableau après avoir supprimé un service
+  updateTable();
+  
+}
+function updateTable() {
+  var resultatElement = document.getElementById("resultat");
+  resultatElement.innerHTML = "";
+  var previousLine = null;
+
+  for (var i = 0; i < tableauServices.length; i++) {
+    var ligneService = tableauServices[i];
+    var prix = ligneService.prix;
+   
+    var tva = ligneService.tva;
+    var description = ligneService.description;
+    var libelle = ligneService.libelle;
+    var categorie = ligneService.categorie;
+    var isDuplicate =
+      previousLine &&
+      previousLine.prix === prix &&
+    
+      previousLine.tva === tva &&
+      previousLine.description === description &&
+      previousLine.libelle === libelle &&
+      previousLine.categorie === categorie;
+
+    if (!isDuplicate) {
+      var nouvelleLigne = resultatElement.insertRow();
+      var libelleCategorieCell = nouvelleLigne.insertCell();
+      var libelleServiceCell = nouvelleLigne.insertCell();
+      var prixCell = nouvelleLigne.insertCell();
+      var tvaCell = nouvelleLigne.insertCell();
+      var descriptionCell = nouvelleLigne.insertCell();
+
+      libelleServiceCell.textContent = libelle;
+      libelleCategorieCell.textContent = categorie;
+      prixCell.textContent = prix;
+      tvaCell.textContent = tva;
+      descriptionCell.textContent = description;
+
+      previousLine = ligneService;
+    }
   }
 }
 
@@ -261,6 +308,9 @@ $(document).on('change', '.servicee', function () {
   return selectElement;
 }
 
+
+  // Fonction pour vérifier si tous les champs sont remplis
+  
 
 
   
@@ -504,7 +554,54 @@ for (var i = 1; i < tableauServices.length; i++) {
         console.log("la ligne est "+s);
       
   }
-  
+
+  //verication que tous les champs est remplie avant l'envoie et le telechargement
+  function verifierChamps()
+  { 
+     
+
+    user=document.getElementById('user_id').value;
+      dateValue  =  document.getElementById('dateValue').textContent ;
+      
+      echeanceValue =document.getElementById('echeanceValue').textContent ;
+      remiseValue=document.getElementById('remiselabel').textContent ;
+      prixTotalValue= document.getElementById('montant').textContent;
+     
+    
+      service=document.getElementById('tableauIdsServicesInput').value;
+
+      if(dateValue!== "" && echeanceValue !== "" && remiseValue !== "" && prixTotalValue !== "" && user !== "" && service!== "")
+      {
+          document.getElementById('btnEnvoyer').removeAttribute('disabled');
+          document.getElementById('btnTelecharger').removeAttribute('disabled');
+      
+          console.log(user);
+
+      }
+      
+
+      else {
+  // Désactiver le bouton "Envoyer" si au moins un champ n'est pas rempli
+  document.getElementById('btnEnvoyer').setAttribute('disabled', 'disabled');
+  document.getElementById('btnTelecharger').setAttribute('disabled', 'disabled');
+  console.log('no');
+        }
+  }
+ 
+  // Observer les changements des champs
+var observer = new MutationObserver(verifierChamps);
+var options = {
+subtree: true,
+characterData: true,
+childList: true,
+};
+observer.observe(document.getElementById('dateValue'), options);
+observer.observe(document.getElementById('echeanceValue'), options);
+observer.observe(document.getElementById('remiselabel'), options);
+observer.observe(document.getElementById('montant'), options);
+observer.observe(document.getElementById('tableauIdsServicesInput'), options);
+
+
   const uploadIcon = document.querySelector('.upload-icon');
                                   const photoInput = document.querySelector('#photo');
                           

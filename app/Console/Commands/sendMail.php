@@ -2,9 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\FacRecMail;
 use App\Mail\MailNotify;
 use App\Models\Client;
 use App\Models\Facture;
+use App\Models\FactureReccurente;
 use Exception;
 use Illuminate\Console\Command;
 use Mail;
@@ -38,14 +40,16 @@ class sendMail extends Command
         $users = Client::where('subscribe', true)->get();
       //  $subscriberIds = Client::where('subscribe', true)->pluck('id');
     //$factures = Facture::whereIn('Idclient', $subscriberIds)->get();
-
+      
     
     // MailNotify class that is extend from Mailable class.
     try
     {
       
         foreach ($users as $user) {
-        Mail::to($user->email)->send(new MailNotify($data));
+          $facture = FactureReccurente::latest()->first(); 
+          $client = $user;
+        Mail::to($user->email)->send(new FacRecMail($data,$client));
         $this->info('E-mail sent successfully');
         }
     }
